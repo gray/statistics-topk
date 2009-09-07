@@ -1,8 +1,8 @@
 use strict;
 use warnings;
 use Test::More tests => 2;
-use Statistics::Top;
+use Statistics::TopK;
 
-my $counter = Statistics::Top->new;
-isa_ok($counter, 'Statistics::Top', 'new');
-can_ok('Geo::Coder::Bing', qw( top counts ));
+my $counter = Statistics::TopK->new(10);
+isa_ok($counter, 'Statistics::TopK', 'new');
+can_ok('Statistics::TopK', qw( top counts ));
