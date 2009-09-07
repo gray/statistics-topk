@@ -103,8 +103,19 @@ Statistics::TopK - Implementation of the top-k streaming algorithm
 
 =head1 DESCRIPTION
 
-The C<Statistics::TopK> module implements the top-k streaming algorithm.
-...
+The C<Statistics::TopK> module implements the top-k streaming algorithm,
+also know as the "heavy hitters" algorithm. It is designed to process
+data streams and probabilistally calculate the C<k> most frequent items
+while using limited memory.
+
+A typical example would be to determine the top 10 IP addresses listed in an
+access log. A simple solution would be to hash each IP address to a counter
+and then sort the resulting hash by the counter size. But the hash could
+theoretically require over 4 billion keys.
+
+The top-k algorithm only requires storage space proportional to the number
+of items of interest. It accomplishes this by sacrificing precision, as
+it is only a probabilist counter.
 
 =head1 METHODS
 
@@ -113,7 +124,7 @@ The C<Statistics::TopK> module implements the top-k streaming algorithm.
     $counter = Statistics::TopK->new($k)
 
 Creates a new C<Statistics::TopK> object which is prepared to count the top
- C<$k> elements.
+C<$k> elements.
 
 =head2 top
 
@@ -126,6 +137,10 @@ Returns the list of the top-k counted elements so far.
     %counts = $counter->counts();
 
 Returns a hash of the top-k counted elements and their counts.
+
+=head1 SEE ALSO
+
+http://en.wikipedia.org/wiki/Streaming_algorithm#Heavy_hitters
 
 =head1 REQUESTS AND BUGS
 
