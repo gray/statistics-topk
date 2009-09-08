@@ -9,8 +9,8 @@ our $VERSION = '0.01';
 $VERSION = eval $VERSION;
 
 use constant _K      => 0;
-use constant _ELEMS   => 1;
-use constant _COUNTS => 2;
+use constant _COUNTS => 1;
+use constant _ELEMS  => 2;
 use constant _SIZE   => 3;
 use constant _INDEX  => 4;
 
@@ -22,15 +22,15 @@ sub new {
 
     my $self = [
         $k,  # _K
-        {},  # _ELEMS
-        [],  # _COUNTS
+        {},  # _COUNTS
+        [],  # _ELEMS
         0,   # _SIZE
         0,   # _INDEX
     ];
 
     # Pre-extend the internal data structures, just in case $k is large.
-    keys %{$self->[_ELEMS]} = $k;
-    $#{$self->[_COUNTS]}   = $k - 1;
+    keys %{ $self->[_COUNTS] } = $k;
+    $#{ $self->[_ELEMS] } = $k - 1;
 
     return bless $self, $class;
 }
@@ -39,29 +39,32 @@ sub add {
     my ($self, $elem) = @_;
 
     # Increment the element's counter if it is currently being counted.
-    if (exists $self->[_ELEMS]{$elem}) {
-        return $self->[_COUNTS][ $self->[_ELEMS]{$elem} ] += 1;
+    if (exists $self->[_COUNTS]{$elem}) {
+        return $self->[_COUNTS]{$elem} += 1;
     }
 
     # Add the element if it's not being counted and there are free slots.
     if ($self->[_SIZE] < $self->[_K]) {
-        my $size = $self->[_SIZE] += 1;
-        $self->[_ELEMS]{$elem} = $size;
-        return $self->[_COUNTS][$size] = 1;
+        $self->[_ELEMS][ $self->[_SIZE]++ ] = $elem;
+        return $self->[_COUNTS]{$elem} = 1;
     }
 
     # Decrement one of the currently counted elements.
-    my $count = $self->[_COUNTS][ $self->[_INDEX] ] -= 1;
+    my $index = $self->[_INDEX];
+    my $prev  = $self->[_ELEMS][$index];
+    my $count = $self->[_COUNTS]{$prev} -= 1;
+
     # Advance the counter.
-    $self->[_INDEX] = $self->[_INDEX]++ % $self->[_K];
+    $self->[_INDEX] = ++$self->[_INDEX] % $self->[_K];
 
     # If the count of the decremented element reaches 0, replace it with the
     # current element.
     if (0 == $count) {
-        delete $self->[_ELEMS]{$elem};
+        delete $self->[_COUNTS]{$prev};
 
-        $self->[_ELEMS]{$elem} = $self->[_INDEX];
-        return $self->[_COUNTS][ $self->[_INDEX] ] = 1;
+        $self->[_ELEMS][$index] = $elem;
+
+        return $self->[_COUNTS]{$elem} = 1;
     }
 
     # This element is not currently being counted.
@@ -69,15 +72,11 @@ sub add {
 }
 
 sub top {
-    return keys %{$_[0]->[_ELEMS]};
+    return keys %{$_[0]->[_COUNTS]};
 }
 
 sub counts {
-    my ($self) = @_;
-
-    return map {
-        $_ => $self->[_COUNTS][ $self->[_ELEMS]{$_} ]
-    } $self->topk;
+    return %{$_->[0]->[_COUNTS]};
 }
 
 
@@ -130,7 +129,7 @@ C<$k> elements.
 
     @top = $counter->top();
 
-Returns the list of the top-k counted elements so far.
+Returns a list of the top-k counted elements.
 
 =head2 counts
 
