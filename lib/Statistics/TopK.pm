@@ -125,15 +125,26 @@ it is only a probabilist counter.
 Creates a new C<Statistics::TopK> object which is prepared to count the top
 C<$k> elements.
 
+=head2 add
+
+    $count = $counter->add($element)
+
+Count the given C<$element> and return its approximate count (if any) in the 
+C<Statistics::TopK> object.
+
+Note that adding an element does not guarantee it will be counted yet,
+as the algorithm is probabilistic, and the occurrence of the current element
+might only be used decrease the count of one of the current top elements.
+
 =head2 top
 
-    @top = $counter->top();
+    @top = $counter->top()
 
 Returns a list of the top-k counted elements.
 
 =head2 counts
 
-    %counts = $counter->counts();
+    %counts = $counter->counts()
 
 Returns a hash of the top-k counted elements and their counts.
 
