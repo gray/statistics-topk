@@ -114,7 +114,7 @@ theoretically require over 4 billion keys.
 
 The top-k algorithm only requires storage space proportional to the number
 of items of interest. It accomplishes this by sacrificing precision, as
-it is only a probabilist counter.
+it is only a probabilistic counter.
 
 =head1 METHODS
 
