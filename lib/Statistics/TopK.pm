@@ -129,7 +129,7 @@ C<$k> elements.
 
     $count = $counter->add($element)
 
-Count the given C<$element> and return its approximate count (if any) in the 
+Count the given C<$element> and return its approximate count (if any) in the
 C<Statistics::TopK> object.
 
 Note that adding an element does not guarantee it will be counted yet,
@@ -155,9 +155,9 @@ http://en.wikipedia.org/wiki/Streaming_algorithm#Heavy_hitters
 =head1 REQUESTS AND BUGS
 
 Please report any bugs or feature requests to
-L<http://rt.cpan.org/Public/Bug/Report.html?Queue=Statistics-TopK>. I will be
-notified, and then you'll automatically be notified of progress on your bug
-as I make changes.
+L<http://rt.cpan.org/Public/Bug/Report.html?Queue=Statistics-TopK>. I will
+be notified, and then you'll automatically be notified of progress on your
+bug as I make changes.
 
 =head1 SUPPORT
 
@@ -187,7 +187,7 @@ L<http://rt.cpan.org/Public/Dist/Display.html?Name=Statistics-TopK>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/Statistics-TopK>
+L<http://search.cpan.org/dist/Statistics-TopK/>
 
 =back
 
