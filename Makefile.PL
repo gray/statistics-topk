@@ -18,8 +18,28 @@ my %conf = (
     clean => { FILES    => 'Statistics-TopK-*' },
 );
 
-unless (eval { ExtUtils::MakeMaker->VERSION(6.46) }) {
-    delete $conf{META_MERGE};
-}
+my $eumm_version =  do {
+    no warnings 'numeric';
+    eval $ExtUtils::MakeMaker::VERSION;
+};
+delete $conf{META_MERGE} if $eumm_version < 6.46;
+$conf{PREREQ_PM} = {
+    %{ $conf{PREREQ_PM} || {} }, %{ delete $conf{BUILD_REQUIRES} },
+} if ($conf{BUILD_REQUIRES} and $eumm_version < 6.5503);
 
 WriteMakefile(%conf);
+
+
+sub MY::postamble {
+    return <<"    MAKE_FRAG";
+authortest:
+\t\$(MAKE) -e \$(TEST_TYPE) TEST_FILES="xt/*.t"
+    MAKE_FRAG
+}
+
+sub MY::dist_test {
+    my $self = shift;
+    return $self->MM::dist_test . <<"    MAKE_FRAG";
+\tcd \$(DISTVNAME) && \$(MAKE) authortest \$(PASTHRU)
+    MAKE_FRAG
+}

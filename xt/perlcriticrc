@@ -16,6 +16,7 @@ severity = 5
 
 [-TestingAndDebugging::ProhibitNoStrict]
 [-BuiltinFunctions::ProhibitStringyEval]
+[-Modules::RequireFilenameMatchesPackage]
 
 # requires Regexp::Parser
 [RegularExpressions::ProhibitUnusedCapture]
