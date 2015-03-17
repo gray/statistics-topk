@@ -1,0 +1,7 @@
+MANIFEST.bak
+MYMETA.*
+Makefile
+Makefile.old
+Statistics-TopK-*
+blib/
+pm_to_blib
