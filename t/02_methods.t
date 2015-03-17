@@ -1,6 +1,6 @@
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More;
 use Statistics::TopK;
 
 {
@@ -15,6 +15,11 @@ use Statistics::TopK;
     }
     is_deeply(
         [$counter->top], ['a'], 'stream containing one distinct element'
+    );
+    is_deeply(
+        [ $counter->counts ],
+        [ a => 100 ],
+        'counts for one stream with one distinct element'
     );
 }
 
@@ -73,3 +78,5 @@ use Statistics::TopK;
         'stream with non-uniform distribution'
     );
 }
+
+done_testing;
