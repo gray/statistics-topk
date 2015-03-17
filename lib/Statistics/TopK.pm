@@ -76,7 +76,7 @@ sub top {
 }
 
 sub counts {
-    return %{$_->[0]->[_COUNTS]};
+    return %{$_[0]->[_COUNTS]};
 }
 
 
